@@ -42,7 +42,9 @@ if __name__ == '__main__':
         parser.exit()
 
     if args.dir:
-        array_certs = local_cert.get_files_dir('certs')
-        for cert in array_certs:
-            dict_cert = local_cert.get_cert_info(cert.read(), 'base64')
+        array_dict_cert = []
+        array_certs_path = local_cert.get_files_dir('certs')
+        for cert_path in array_certs_path:
+            array_dict_cert.append(local_cert.get_cert_info(local_cert.get_file_content(cert_path), 'base64'))
+        print_info(array_dict_cert)
         parser.exit()
