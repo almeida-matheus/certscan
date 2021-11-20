@@ -1,10 +1,10 @@
 try:
     import os
+    from collections import OrderedDict
     from OpenSSL import crypto # pyOpenSSL
     from datetime import datetime
     from cryptography import x509 # cryptography
     from cryptography.hazmat.backends import default_backend
-    from pprint import pprint
 except ImportError as e:
     print(f"{e}\nyou must install some libs from requeriments.txt in order to run this script\npip install -r requeriments.txt")
 
@@ -18,18 +18,16 @@ class LocalCertificate:
         try:
             cert_path = os.path.join(self.current_dir, file_path)
             with open(cert_path) as f:
-                content = f.read()
-                return content
+                return f.read()
         except:
             raise OSError("Error: cannot read this file")
 
     def get_files_dir(self,dir_certs):
         ''' scan dir with certificates to get the path of certificate files '''
         try:
-            #os.listdir() will get you files and directories in a directory
             array_certs_path  = [os.path.join(self.current_dir,dir_certs, f) for f in os.listdir(
                 dir_certs) if os.path.isfile(os.path.join(dir_certs, f))]
-            return array_certs_path
+            return array_certs_path #os.listdir() will get you files and directories in a directory
         except:
             raise OSError("Error: cannot read this directory")
 
@@ -42,10 +40,10 @@ class LocalCertificate:
             x509.DNSName
         )
         return dns_names
-    
+
     def get_cert_info(self, cert_content, encoding_type='base64'):
         ''' return dict wih info of certificate  '''
-        dict_cert = {}
+        dict_cert = OrderedDict()
         if encoding_type == 'base64': # base64 - pem
             cert_openssl = crypto.load_certificate(crypto.FILETYPE_PEM, cert_content)
             cert_crypto = x509.load_pem_x509_certificate(str.encode(cert_content), default_backend()) #instance of Certificate
@@ -53,13 +51,13 @@ class LocalCertificate:
             cert_openssl = crypto.load_certificate(crypto.FILETYPE_ASN1, cert_content)
             cert_crypto = x509.load_pem_x509_certificate(str.encode(cert_content), default_backend()) 
 
-        dict_cert["dns_names"]  = self.get_alternative_names(cert_crypto)
-
         dict_cert["common_name_subject"] = cert_openssl.get_subject().commonName
+        dict_cert["dns_names"]  = self.get_alternative_names(cert_crypto)
         dict_cert["common_name_issuer"] = cert_openssl.get_issuer().commonName
         dict_cert["organization_name_issuer"] = cert_openssl.get_issuer().organizationName
         dict_cert["has_expired"] = cert_openssl.has_expired() # checks the certificate's time stamp against current time -  Returns true if the certificate has expired
 
+        # date_format, encoding = "%Y%m%d%H%M%SZ", "ascii"
         date_format, encoding = "%Y%m%d%H%M%SZ", "ascii"
         if cert_openssl.get_notBefore():
            dict_cert["not_before"] = datetime.strptime(cert_openssl.get_notBefore().decode(encoding), date_format)
@@ -68,9 +66,10 @@ class LocalCertificate:
 
         dict_cert["days_to_expire"] = (dict_cert["not_after"] - datetime.now()).days
 
+        dict_cert["self_signed"] = False
         if dict_cert["common_name_subject"] == dict_cert["common_name_issuer"]:
-            dict_cert["observation"] = 'self signed certificate'
-        pprint(dict_cert)
+            dict_cert["self_signed"] = True
+
         return dict_cert
 
     def print_info(self):

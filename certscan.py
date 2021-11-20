@@ -3,11 +3,18 @@
 
 import argparse
 from certificate import LocalCertificate, OnlineCertificate
+from printer import Printer
 
 __version__ = '0.0.1'
 __description__ = """\
 command line tool to scan digital certificate information
 """
+
+def print_info(dict_cert):
+    printer = Printer(dict_cert)
+    if args.text: printer.print_text()
+    elif args.csv: printer.print_csv()
+    else: printer.print_json()
 
 if __name__ == '__main__':
     local_cert = LocalCertificate()
@@ -31,14 +38,11 @@ if __name__ == '__main__':
 
     if args.file:
         dict_cert = local_cert.get_cert_info(args.file.read(), 'base64')
-        if args.text: print(dict_cert)
-        elif args.csv: print(dict_cert)
-        else: print(dict_cert)
+        print_info([dict_cert])
         parser.exit()
 
     if args.dir:
         array_certs = local_cert.get_files_dir('certs')
         for cert in array_certs:
-            print(cert)
             dict_cert = local_cert.get_cert_info(cert.read(), 'base64')
         parser.exit()
