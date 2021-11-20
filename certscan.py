@@ -22,10 +22,10 @@ if __name__ == '__main__':
     reader = Reader()
 
     parser = argparse.ArgumentParser(description=__description__)
-    parser.add_argument('-u','--uri', help='get certificate information from a URI')
-    parser.add_argument('-r','--read', help='get certificate information from read a file containing URIs')
     parser.add_argument('-f','--file', type=argparse.FileType('r', encoding='UTF-8'), help='get certificate information from local file certificate')
     parser.add_argument('-d','--dir', help='get information from certificates that are within a local directory')
+    parser.add_argument('-u','--uri', help='get certificate information from a URI')
+    parser.add_argument('-r','--read', help='get certificate information from read a file containing URIs')
     parser.add_argument('-j','--json', action='store_true', help='show output in json format')
     parser.add_argument('-t','--text', action='store_true', help='show output in text format')
     parser.add_argument('-c','--csv', action='store_true', help='show output in csv format')
@@ -47,5 +47,18 @@ if __name__ == '__main__':
         array_certs_path = reader.get_files_in_dir('certs')
         for cert_path in array_certs_path:
             array_dict_cert.append(inst_cert.get_cert_info(reader.get_file_content(cert_path), 'base64'))
+        print_info(array_dict_cert)
+        parser.exit()
+
+    if args.uri:
+        dict_cert = inst_cert.get_cert_info_by_domain(args.uri)
+        print_info([dict_cert])
+        parser.exit()
+
+    if args.read:
+        array_dict_cert = []
+        array_hosts = reader.get_file_lines(args.read)
+        for host in array_hosts:
+            array_dict_cert.append(inst_cert.get_cert_info_by_domain(args.uri))
         print_info(array_dict_cert)
         parser.exit()
