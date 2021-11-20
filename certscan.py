@@ -2,8 +2,9 @@
 #!/usr/bin/env python3
 
 import argparse
-from certificate import LocalCertificate, OnlineCertificate
+from certificate import Certificate
 from printer import Printer
+from reader import Reader
 
 __version__ = '0.0.1'
 __description__ = """\
@@ -17,8 +18,8 @@ def print_info(dict_cert):
     else: printer.print_json()
 
 if __name__ == '__main__':
-    local_cert = LocalCertificate()
-    online_cert = OnlineCertificate()
+    inst_cert = Certificate()
+    reader = Reader()
 
     parser = argparse.ArgumentParser(description=__description__)
     parser.add_argument('-u','--uri', help='get certificate information from a URI')
@@ -37,14 +38,14 @@ if __name__ == '__main__':
         parser.exit()
 
     if args.file:
-        dict_cert = local_cert.get_cert_info(args.file.read(), 'base64')
+        dict_cert = reader.get_cert_info(args.file.read(), 'base64')
         print_info([dict_cert])
         parser.exit()
 
     if args.dir:
         array_dict_cert = []
-        array_certs_path = local_cert.get_files_dir('certs')
+        array_certs_path = reader.get_files_in_dir('certs')
         for cert_path in array_certs_path:
-            array_dict_cert.append(local_cert.get_cert_info(local_cert.get_file_content(cert_path), 'base64'))
+            array_dict_cert.append(inst_cert.get_cert_info(reader.get_file_content(cert_path), 'base64'))
         print_info(array_dict_cert)
         parser.exit()

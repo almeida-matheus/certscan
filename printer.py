@@ -13,7 +13,7 @@ class Printer:
             '''json serializer for objects not serializable by default json code'''
             if isinstance(obj, (datetime, date)): # checks to find out if object is of class datetime or date, and then uses .isoformat() to produce a serialized version of it
                 return obj.isoformat()
-            raise TypeError (f'Error: type {type(obj)} not serializable')
+            raise TypeError (f'error: type {type(obj)} not serializable')
 
         print(json.dumps(self.array_dict_cert, indent=4, default=json_serial))
 
