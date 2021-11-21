@@ -53,7 +53,6 @@ class Certificate:
 
     def get_cert_info_by_domain(self, hostname):
         ''' connect to host to get digital certificate '''
-        hostname = 'matheustech.com.br'
         sckt = socket()
         sckt.connect((hostname, 443)) # establish a connection to the remote server
 

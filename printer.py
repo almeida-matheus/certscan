@@ -19,7 +19,8 @@ class Printer:
 
     def print_text(self):
         ''' convert dict to text table format '''
-        for dict_cert in self.array_dict_cert:
+        for i, dict_cert in enumerate(self.array_dict_cert):
+            if i: print('')
             print('Issued to: [green bold]{}[/]'.format(dict_cert["subject_common_name"]))
             print('Issued by: [green bold]{} - {}[/]'.format(dict_cert["issuer_common_name"], dict_cert["issuer_org_name"]))
             print('Alternative names: [green]{}[/]'.format(" ".join(str(name) for name in dict_cert["subject_alt_name"])))
@@ -31,7 +32,6 @@ class Printer:
                 print('It has been [red bold]{}[/] days since the certificate expired'.format(abs(dict_cert["days_to_expire"])))
             if dict_cert["self_signed"]:
                 print('Certificate is [red bold]self signed[/]')
-            print('')
 
     def print_csv(self):
         ''' convert dict to csv format '''

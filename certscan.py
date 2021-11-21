@@ -22,7 +22,8 @@ if __name__ == '__main__':
     reader = Reader()
 
     parser = argparse.ArgumentParser(description=__description__)
-    parser.add_argument('-f','--file', type=argparse.FileType('r', encoding='UTF-8'), help='get certificate information from local file certificate')
+    # parser.add_argument('-f','--file', type=argparse.FileType('r', encoding='UTF-8'), help='get certificate information from local file certificate')
+    parser.add_argument('-f','--file', help='get certificate information from local file certificate')
     parser.add_argument('-d','--dir', help='get information from certificates that are within a local directory')
     parser.add_argument('-u','--uri', help='get certificate information from a URI')
     parser.add_argument('-r','--read', help='get certificate information from read a file containing URIs')
@@ -38,7 +39,8 @@ if __name__ == '__main__':
         parser.exit()
 
     if args.file:
-        dict_cert = reader.get_cert_info(args.file.read(), 'base64')
+        file_content, format_cert = reader.get_file_content(args.file)
+        dict_cert = inst_cert.get_cert_info(file_content, format_cert)
         print_info([dict_cert])
         parser.exit()
 
@@ -46,7 +48,8 @@ if __name__ == '__main__':
         array_dict_cert = []
         array_certs_path = reader.get_files_in_dir('certs')
         for cert_path in array_certs_path:
-            array_dict_cert.append(inst_cert.get_cert_info(reader.get_file_content(cert_path), 'base64'))
+            file_content, format_cert = reader.get_file_content(cert_path)
+            array_dict_cert.append(inst_cert.get_cert_info(file_content, format_cert))
         print_info(array_dict_cert)
         parser.exit()
 
@@ -59,6 +62,6 @@ if __name__ == '__main__':
         array_dict_cert = []
         array_hosts = reader.get_file_lines(args.read)
         for host in array_hosts:
-            array_dict_cert.append(inst_cert.get_cert_info_by_domain(args.uri))
+            array_dict_cert.append(inst_cert.get_cert_info_by_domain(host))
         print_info(array_dict_cert)
         parser.exit()
