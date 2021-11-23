@@ -2,9 +2,7 @@
 #!/usr/bin/env python3
 
 import argparse
-from certificate import Certificate
-from printer import Printer
-from reader import Reader
+import resources
 
 __version__ = '0.0.1'
 __description__ = """\
@@ -12,14 +10,14 @@ command line tool to scan digital certificate information
 """
 
 def print_info(dict_cert):
-    printer = Printer(dict_cert)
+    printer = resources.Printer(dict_cert)
     if args.text: printer.print_text()
     elif args.csv: printer.print_csv()
     else: printer.print_json()
 
 if __name__ == '__main__':
-    inst_cert = Certificate()
-    reader = Reader()
+    inst_cert = resources.Certificate()
+    reader = resources.Reader()
 
     parser = argparse.ArgumentParser(description=__description__)
     # parser.add_argument('-f','--file', type=argparse.FileType('r', encoding='UTF-8'), help='get certificate information from local file certificate')
