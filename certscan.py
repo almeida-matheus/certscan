@@ -4,9 +4,9 @@
 import argparse
 import resources
 
-__version__ = '0.0.1'
+__version__ = '1.0.0'
 __description__ = """\
-command line tool to scan digital certificate information
+command line tool to scan digital certificate information from local files or by parsing domain name
 """
 
 def print_info(dict_cert):
@@ -20,15 +20,16 @@ if __name__ == '__main__':
     reader = resources.Reader()
 
     parser = argparse.ArgumentParser(description=__description__)
+    group = parser.add_mutually_exclusive_group()
     # parser.add_argument('-f','--file', type=argparse.FileType('r', encoding='UTF-8'), help='get certificate information from local file certificate')
-    parser.add_argument('-f','--file', help='get certificate information from local file certificate')
-    parser.add_argument('-d','--dir', help='get information from certificates that are within a local directory')
-    parser.add_argument('-u','--uri', help='get certificate information from a URI')
-    parser.add_argument('-r','--read', help='get certificate information from read a file containing URIs')
+    group.add_argument('-f','--file', help='get certificate information from local file certificate')
+    group.add_argument('-d','--dir', help='get information from certificates that are within a local directory')
+    group.add_argument('-u','--uri', help='get certificate information from a URI')
+    group.add_argument('-r','--read', help='get certificate information from read a file containing URIs')
     parser.add_argument('-j','--json', action='store_true', help='show output in json format')
     parser.add_argument('-t','--text', action='store_true', help='show output in text format')
     parser.add_argument('-c','--csv', action='store_true', help='show output in csv format')
-    parser.add_argument('-v','--version', action='store_true', help='show certscan version')
+    group.add_argument('-v','--version', action='store_true', help='show certscan version')
     # parser.add_argument('-h','--help', action='store_true', help='show this help message')
     args = parser.parse_args()
 

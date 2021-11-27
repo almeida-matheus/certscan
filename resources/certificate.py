@@ -1,7 +1,7 @@
 try:
-    from OpenSSL import crypto # pyOpenSSL
+    from OpenSSL import crypto
     from datetime import datetime
-    from cryptography import x509 # cryptography
+    from cryptography import x509
     from cryptography.hazmat.backends import default_backend
     from collections import OrderedDict
     from socket import socket
@@ -35,6 +35,9 @@ class Certificate:
         dict_cert["subject_alt_name"]  = self._get_alternative_names(cert_crypto)
         dict_cert["issuer_common_name"] = cert_openssl.get_issuer().commonName
         dict_cert["issuer_org_name"] = cert_openssl.get_issuer().organizationName
+        # dict_cert["serial_number"] = cert_openssl.get_serial_number()
+        # dict_cert["version"] = cert_openssl.get_version()
+
         dict_cert["has_expired"] = cert_openssl.has_expired() # checks the certificate's time stamp against current time -  returns true if the certificate has expired
 
         date_format, encoding = "%Y%m%d%H%M%SZ", "ascii"
@@ -56,7 +59,7 @@ class Certificate:
         sckt = socket()
         sckt.connect((hostname, 443)) # establish a connection to the remote server
 
-        context = ssl.create_default_context() # create ssl context with default settings
+        context = ssl._create_unverified_context()
         ssl_sckt = context.wrap_socket(sckt, server_hostname=hostname)
 
         cert_content_bin = ssl_sckt.getpeercert(True)

@@ -1,5 +1,5 @@
 from datetime import date, datetime
-from rich import print # rich
+from rich import print
 import json
 
 class Printer:
@@ -24,10 +24,10 @@ class Printer:
             print('Issued to: [green bold]{}[/]'.format(dict_cert["subject_common_name"]))
             print('Issued by: [green bold]{} - {}[/]'.format(dict_cert["issuer_common_name"], dict_cert["issuer_org_name"]))
             print('Alternative names: [green]{}[/]'.format(" ".join(str(name) for name in dict_cert["subject_alt_name"])))
-            print('Valid from [bright_cyan]{}[/] to [bright_cyan]{}[/]'.format(
+            print('Valid from [cyan]{}[/] to [cyan]{}[/]'.format(
                 dict_cert["not_before"].strftime('%d/%m/%Y'), dict_cert["not_after"].strftime('%d/%m/%Y')))
             if not dict_cert["has_expired"]:
-                print('[bright_cyan]{}[/] days left for certificate to expire'.format(dict_cert["days_to_expire"]))
+                print('[cyan]{}[/] days left for certificate to expire'.format(dict_cert["days_to_expire"]))
             else:
                 print('It has been [red bold]{}[/] days since the certificate expired'.format(abs(dict_cert["days_to_expire"])))
             if dict_cert["self_signed"]:
