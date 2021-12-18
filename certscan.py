@@ -16,7 +16,7 @@ def print_info(dict_cert):
     else: printer.print_json()
 
 if __name__ == '__main__':
-    inst_cert = resources.Certificate()
+    cert = resources.Certificate()
     reader = resources.Reader()
 
     parser = argparse.ArgumentParser(description=__description__)
@@ -37,30 +37,35 @@ if __name__ == '__main__':
         print(__version__)
         parser.exit()
 
-    if args.file:
-        file_content, format_cert = reader.get_file_content(args.file)
-        dict_cert = inst_cert.get_cert_info(file_content, format_cert)
-        print_info([dict_cert])
-        parser.exit()
+    try:
+        if args.file:
+            file_content, format_cert = reader.get_file_content(args.file)
+            dict_cert = cert.get_cert_info(file_content, format_cert)
 
-    if args.dir:
-        array_dict_cert = []
-        array_certs_path = reader.get_files_in_dir('certs')
-        for cert_path in array_certs_path:
-            file_content, format_cert = reader.get_file_content(cert_path)
-            array_dict_cert.append(inst_cert.get_cert_info(file_content, format_cert))
-        print_info(array_dict_cert)
-        parser.exit()
+            # dict_cert = cert.get_cert_info(args.file.read())
+            print_info([dict_cert])
+            parser.exit()
 
-    if args.uri:
-        dict_cert = inst_cert.get_cert_info_by_domain(args.uri)
-        print_info([dict_cert])
-        parser.exit()
+        if args.dir:
+            array_dict_cert = []
+            array_certs_path = reader.get_files_in_dir('certs')
+            for cert_path in array_certs_path:
+                file_content, format_cert = reader.get_file_content(cert_path)
+                array_dict_cert.append(cert.get_cert_info(file_content, format_cert))
+            print_info(array_dict_cert)
+            parser.exit()
 
-    if args.read:
-        array_dict_cert = []
-        array_hosts = reader.get_file_lines(args.read)
-        for host in array_hosts:
-            array_dict_cert.append(inst_cert.get_cert_info_by_domain(host))
-        print_info(array_dict_cert)
-        parser.exit()
+        if args.uri:
+            dict_cert = cert.get_cert_info_by_domain(args.uri)
+            print_info([dict_cert])
+            parser.exit()
+
+        if args.read:
+            array_dict_cert = []
+            array_hosts = reader.get_file_lines(args.read)
+            for host in array_hosts:
+                array_dict_cert.append(cert.get_cert_info_by_domain(host))
+            print_info(array_dict_cert)
+            parser.exit()
+    except Exception as e:
+        print(e)
