@@ -22,7 +22,7 @@ Command line tool to get information in different formats from a local or web do
 
 Supports base64 and binary certificate content.
 
-### Extraction Types
+### Extraction types
 
 - Get information from a local certificate by passing `-f` as an argument and then the filename:
 
@@ -40,11 +40,35 @@ Supports base64 and binary certificate content.
 
 `certscan -r <file>`
 
-### Output Types
+### Output types
 
 - json - append:  `-j`
 - text - append: `-t`
 - csv - append: `-c`
+
+### Output example
+`certscan -u github.com -j`
+
+```json
+[
+    {
+        "subject_common_name": "github.com",
+        "subject_alt_name": [
+            "github.com",
+            "www.github.com"
+        ],
+        "issuer_common_name": "DigiCert High Assurance TLS Hybrid ECC SHA256 2020 CA1",
+        "issuer_org_name": "DigiCert, Inc.",
+        "serial_number": 19335859262210987870682549325523936958,
+        "version": 2,
+        "has_expired": false,
+        "not_before": "2021-03-25T00:00:00",
+        "not_after": "2022-03-30T23:59:59",
+        "days_to_expire": 53,
+        "self_signed": false
+    }
+]
+```
 
 ## Installation
 

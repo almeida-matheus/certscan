@@ -35,8 +35,8 @@ class Certificate:
         dict_cert["subject_alt_name"]  = self._get_alternative_names(cert_crypto)
         dict_cert["issuer_common_name"] = cert_openssl.get_issuer().commonName
         dict_cert["issuer_org_name"] = cert_openssl.get_issuer().organizationName
-        # dict_cert["serial_number"] = cert_openssl.get_serial_number()
-        # dict_cert["version"] = cert_openssl.get_version()
+        dict_cert["serial_number"] = cert_openssl.get_serial_number()
+        dict_cert["version"] = cert_openssl.get_version()
 
         dict_cert["has_expired"] = cert_openssl.has_expired() # checks the certificate's time stamp against current time -  returns true if the certificate has expired
 
