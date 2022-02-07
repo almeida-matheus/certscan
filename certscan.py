@@ -21,16 +21,16 @@ if __name__ == '__main__':
 
     parser = argparse.ArgumentParser(description=__description__)
     group = parser.add_mutually_exclusive_group()
+    # parser.add_argument('-h','--help', action='store_true', help='show this help message and exit')
+    group.add_argument('-v','--version', action='store_true', help='show certscan version')
     # parser.add_argument('-f','--file', type=argparse.FileType('r', encoding='UTF-8'), help='get certificate information from local file certificate')
     group.add_argument('-f','--file', help='get certificate information from local file certificate')
-    group.add_argument('-d','--dir', help='get information from certificates that are within a local directory')
+    group.add_argument('-d','--dir', help='get certificate information from certificates that are within a local directory')
     group.add_argument('-u','--uri', help='get certificate information from a URI')
     group.add_argument('-r','--read', help='get certificate information from read a file containing URIs')
     parser.add_argument('-j','--json', action='store_true', help='show output in json format')
     parser.add_argument('-t','--text', action='store_true', help='show output in text format')
     parser.add_argument('-c','--csv', action='store_true', help='show output in csv format')
-    group.add_argument('-v','--version', action='store_true', help='show certscan version')
-    # parser.add_argument('-h','--help', action='store_true', help='show this help message')
     args = parser.parse_args()
 
     if args.version:
@@ -41,7 +41,6 @@ if __name__ == '__main__':
         if args.file:
             file_content, format_cert = reader.get_file_content(args.file)
             dict_cert = cert.get_cert_info(file_content, format_cert)
-
             # dict_cert = cert.get_cert_info(args.file.read())
             print_info([dict_cert])
             parser.exit()

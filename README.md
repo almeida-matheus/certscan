@@ -22,6 +22,26 @@ Command line tool to get information in different formats from a local or web do
 
 Supports base64 and binary certificate content.
 
+### Instructions
+`certscan -h`
+
+```
+usage: certscan.py [-h] [-v | -f FILE | -d DIR | -u URI | -r READ] [-j] [-t] [-c]
+
+command line tool to scan digital certificate information from local files or by parsing domain name
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -v, --version         show certscan version
+  -f FILE, --file FILE  get certificate information from local file certificate
+  -d DIR, --dir DIR     get certificate information from certificates that are within a local directory
+  -u URI, --uri URI     get certificate information from a URI
+  -r READ, --read READ  get certificate information from read a file containing URIs
+  -j, --json            show output in json format
+  -t, --text            show output in text format
+  -c, --csv             show output in csv format
+```
+
 ### Extraction types
 
 - Get information from a local certificate by passing `-f` as an argument and then the filename:
